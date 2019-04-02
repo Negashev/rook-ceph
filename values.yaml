@@ -1,0 +1,61 @@
+# Default values for rook-ceph.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# clustersystem for rancher multiple app we use regexp
+clustersystem: rook-ceph-system
+clustername: rook-ceph
+clusterspec:
+  cephVersion:
+    image: ceph/ceph:v13.2.2-20181023
+  dashboard:
+    enabled: true
+  dataDirHostPath: /var/lib/rook
+  mon:
+    allowMultiplePerNode: false
+    count: 3
+  network:
+    hostNetwork: true
+  placement:
+    all:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: storage
+              operator: In
+              values:
+              - ceph
+      tolerations:
+      - key: storage
+        operator: Exists
+  rbdMirroring:
+    workers: 0
+  resources:
+    mgr:
+      limits:
+        cpu: "1"
+        memory: 512Mi
+      requests:
+        cpu: "1"
+        memory: 512Mi
+    mon:
+      limits:
+        cpu: "2"
+        memory: 2Gi
+      requests:
+        cpu: "2"
+        memory: 2Gi
+    osd:
+      requests:
+        memory: 2Gi
+  storage:
+    config:
+      storeType: bluestore
+    directories:
+      - name: "sdb"
+      - name: "sdc"
+      - name: "sdd"
+    location: datacenter=dc1
+    useAllDevices: false
+    useAllNodes: true

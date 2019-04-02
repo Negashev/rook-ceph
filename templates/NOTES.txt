@@ -1,0 +1,1 @@
+Start Ceph Cluster on {{ .Release.Namespace }}
