@@ -14,15 +14,15 @@ spec:
     count: {{ .Values.spec.mon.count }}
   network:
     hostNetwork: {{ .Values.spec.network.hostNetwork }}
-  {{- with .Values.ceph.placement }}
+  {{- with .Values.spec.placement }}
   placement:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.ceph.resources }}
+  {{- with .Values.spec.resources }}
   resources:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with .Values.ceph.storage }}
+  {{- with .Values.spec.storage }}
   storage:
     {{- toYaml . | nindent 4 }}
   {{- end }}
