@@ -1,0 +1,67 @@
+questions:
+- variable: defaultCephImage
+  default: true
+  description: "Use default ceph Engine image or specify a custom one"
+  label: "Use default ceph engine image"
+  type: boolean
+  show_subquestion_if: false
+  group: "Container Images"
+  subquestions:
+  - variable: spec.cephVersion.image.repository
+    default: "ceph/ceph"
+    description: "Ceph Engine Image Repository"
+    type: string
+    label: "Ceph Engine Image Repository"
+  - variable: spec.cephVersion.image.tag
+    default: "v13.2.2-20181023"
+    description: "Ceph Engine Image Tag"
+    type: string
+    label: "Ceph Engine Image Tag"
+- variable: ceph.clustername
+  default: "rook-ceph"
+  description: "Enter cluster name to identify this cluster"
+  type: string
+  label: "Cluster name"
+  group: "Configuration"
+  required: true
+- variable: ceph.clustersystem
+  default: "rook-ceph-system"
+  description: "Enter namespace with rook operator"
+  type: string
+  label: "Rook system namespace"
+  group: "Configuration"
+  required: true
+- variable: spec.network.hostNetwork
+  default: true
+  description: "Uses network of the hosts instead of using the SDN below the containers"
+  type: boolean
+  label: "Host network"
+  group: "Configuration"
+  required: true
+- variable: spec.dashboard.enabled
+  default: true
+  description: "Whether to enable the dashboard to view cluster status"
+  label: "Use dashboard"
+  type: boolean
+  group: "Configuration"
+- variable: ceph.dataDirHostPath
+  default: "/var/lib/rook"
+  description: "The path on the host (hostPath) where config and data should be stored for each of the services. If the directory does not exist, it will be created. Because this directory persists on the host, it will remain after pods are deleted"
+  type: string
+  label: "Rook data dir on host"
+  group: "Configuration"
+  required: true
+- variable: spec.mon.allowMultiplePerNode
+  default: false
+  description: "Enable (true) or disable (false) the placement of multiple mons on one node"
+  label: "Allow Multiple Mon Per Node"
+  type: boolean
+  group: "Mon Settings"
+  required: true
+- variable: spec.mon.count
+  default: 3
+  description: "Set the number of mons to be started. The number should be odd and between 1 and 9. If not specified the default is set to 3 and allowMultiplePerNode is also set to true."
+  label: "Mon count"
+  type: int
+  group: "Mon Settings"
+  required: true

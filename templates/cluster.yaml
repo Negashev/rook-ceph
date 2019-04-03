@@ -1,12 +1,31 @@
 apiVersion: ceph.rook.io/v1
 kind: CephCluster
 metadata:
-  name: {{ .Values.clustername }}
+  name: {{ .Values.ceph.clustername }}
   namespace: {{ .Release.Namespace }}
-{{- with .Values.clusterspec }}
 spec:
-  {{- toYaml . | nindent 2 }}
-{{- end }}
+  cephVersion:
+    image: {{ .Values.spec.cephVersion.image.repository }}:{{ .Values.spec.cephVersion.image.tag }}
+  dashboard:
+    enabled: {{ .Values.spec.dashboard.enabled }}
+  dataDirHostPath: {{ .Values.spec.dataDirHostPath }}
+  mon:
+    allowMultiplePerNode: {{ .Values.spec.mon.allowMultiplePerNode }}
+    count: {{ .Values.spec.mon.count }}
+  network:
+    hostNetwork: {{ .Values.spec.network.hostNetwork }}
+  {{- with .Values.ceph.placement }}
+  placement:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ceph.resources }}
+  resources:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.ceph.storage }}
+  storage:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 ---
 apiVersion: ceph.rook.io/v1
 kind: CephBlockPool
