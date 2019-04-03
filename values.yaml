@@ -51,7 +51,7 @@ spec:
     useAllNodes: true
     config:
       storeType: bluestore
-    # directories:
+    # devices:
     #   - name: "sdb"
     #   - name: "sdc"
     #   - name: "sdd"
