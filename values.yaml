@@ -26,9 +26,6 @@ spec:
               operator: In
               values:
               - ceph
-      tolerations:
-      - key: nodepool
-        operator: Exists
   resources:
     # important manager memory leak problem
     mgr:

@@ -1,11 +1,11 @@
 apiVersion: ceph.rook.io/v1
 kind: CephCluster
 metadata:
-  name: {{ .Values.ceph.clustername }}
+  name: {{ .Values.clustername }}
   namespace: {{ .Release.Namespace }}
 spec:
   cephVersion:
-    image: {{ .Values.spec.cephVersion.image.repository }}:{{ .Values.spec.cephVersion.image.tag }}
+    image: {{ .Values.spec.cephVersion.image }}
   dashboard:
     enabled: {{ .Values.spec.dashboard.enabled }}
   dataDirHostPath: {{ .Values.spec.dataDirHostPath }}
