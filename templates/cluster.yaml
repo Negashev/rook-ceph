@@ -79,8 +79,8 @@ metadata:
   name: mkdir-cephfs
   namespace: {{ .Release.Namespace }}
 spec:
-  backoffLimit: 5
-  activeDeadlineSeconds: 100
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 100
   template:
     spec:
       containers:
@@ -88,14 +88,14 @@ spec:
           image: busybox
           volumeMounts:
             - name: mkdir
-              mountPath: /var/lib/registry
+              mountPath: /data
           command:
             - "mkdir"
             - "-p"
             {{- range splitList "," .Values.CephFilesystem.mkdirs }}
-            - "{{ . }}"
+            - "/data{{ . }}"
             {{- end }}
-      restartPolicy: OnFailure
+      restartPolicy: Never
       volumes:
         - name: mkdir
           flexVolume:
