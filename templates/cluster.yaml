@@ -1,7 +1,7 @@
 apiVersion: ceph.rook.io/v1
 kind: CephCluster
 metadata:
-  name: {{ .Values.clustername }}
+  name: {{ include "rook-ceph.name" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   cephVersion:
@@ -53,3 +53,56 @@ parameters:
   #fstype: xfs
 # Optional, default reclaimPolicy is "Delete". Other options are: "Retain", "Recycle" as documented in https://kubernetes.io/docs/concepts/storage/storage-classes/
 #reclaimPolicy: Retain
+{{- if .Values.CephFilesystem.enabled }}
+---
+apiVersion: ceph.rook.io/v1
+kind: CephFilesystem
+metadata:
+  name: {{ .Values.CephFilesystem.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  metadataPool:
+    replicated:
+      size: 3
+  dataPools:
+    - replicated:
+        size: 3
+  metadataServer:
+    activeCount: 1
+    activeStandby: true
+
+{{- if .Values.CephFilesystem.mkdirs }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mkdir-cephfs
+  namespace: {{ .Release.Namespace }}
+spec:
+  backoffLimit: 5
+  activeDeadlineSeconds: 100
+  template:
+    spec:
+      containers:
+        - name: mkdir-cephfs
+          image: busybox
+          volumeMounts:
+            - name: mkdir
+              mountPath: /var/lib/registry
+          command:
+            - "mkdir"
+            - "-p"
+            {{- range splitList "," .Values.CephFilesystem.mkdirs }}
+             - "{{ . }}"
+            {{- end }}
+      restartPolicy: OnFailure
+      volumes:
+        - name: mkdir
+          flexVolume:
+            driver: ceph.rook.io/rook
+            fsType: ceph
+            options:
+              fsName: {{ .Values.CephFilesystem.name }}
+              clusterNamespace: {{ .Release.Namespace }}
+{{- end -}}
+{{- end -}}

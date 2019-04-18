@@ -17,13 +17,6 @@ questions:
     description: "Ceph Engine Image Tag"
     type: string
     label: "Ceph Engine Image Tag"
-- variable: ceph.clustername
-  default: "rook-ceph"
-  description: "Enter cluster name to identify this cluster"
-  type: string
-  label: "Cluster name"
-  group: "Configuration"
-  required: true
 - variable: ceph.clustersystem
   default: "rook-ceph-system"
   description: "Enter namespace with rook operator"
@@ -65,3 +58,21 @@ questions:
   type: int
   group: "Mon Settings"
   required: true
+- variable: CephFilesystem.enabled
+  default: true
+  description: "Create Ceph File System"
+  label: "Create CephFS"
+  type: boolean
+  show_subquestion_if: false
+  group: "Ceph File System"
+  subquestions:
+    - variable: CephFilesystem.name
+      default: "myfs"
+      description: "name of Ceph File System"
+      type: string
+      label: "CephFS name"
+    - variable: CephFilesystem.mkdirs
+      default: ""
+      description: "Create paths in CephFS separated by comma"
+      type: string
+      label: "CephFS paths"

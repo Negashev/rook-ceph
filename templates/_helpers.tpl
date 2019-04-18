@@ -35,5 +35,5 @@ Create chart name and version as used by the chart label.
 Find rook-ceph-system namespace
 */}}
 {{- define "rook-ceph.system" -}}
-{{- printf .Release.Namespace | replace .Values.clustername .Values.clustersystem -}}
+{{- printf .Release.Namespace | replace (include "rook-ceph.name" .) .Values.clustersystem -}}
 {{- end -}}

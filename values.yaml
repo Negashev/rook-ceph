@@ -4,7 +4,10 @@
 
 # clustersystem for rancher multiple app we use regexp
 clustersystem: rook-ceph-system
-clustername: rook-ceph
+CephFilesystem:
+  enabled: true
+  name: myfs
+  mkdirs: ""
 spec:
   cephVersion:
     image: ceph/ceph:v13.2.2-20181023
