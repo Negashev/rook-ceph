@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   cephVersion:
-    image: {{ .Values.spec.cephVersion.image }}
+    image: {{ .Values.spec.cephVersion.image.repository }}:{{ .Values.spec.cephVersion.image.tag }}
   dashboard:
     enabled: {{ .Values.spec.dashboard.enabled }}
   dataDirHostPath: {{ .Values.spec.dataDirHostPath }}

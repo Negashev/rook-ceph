@@ -10,7 +10,9 @@ CephFilesystem:
   mkdirs: ""
 spec:
   cephVersion:
-    image: ceph/ceph:v13.2.2-20181023
+    image:
+      repository: ceph/ceph
+      tag: v13.2.2-20181023
   dashboard:
     enabled: true
   dataDirHostPath: /var/lib/rook
