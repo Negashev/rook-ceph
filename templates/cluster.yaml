@@ -93,7 +93,7 @@ spec:
             - "mkdir"
             - "-p"
             {{- range splitList "," .Values.CephFilesystem.mkdirs }}
-             - "{{ . }}"
+            - "{{ . }}"
             {{- end }}
       restartPolicy: OnFailure
       volumes:
