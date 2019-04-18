@@ -59,11 +59,11 @@ questions:
   group: "Mon Settings"
   required: true
 - variable: CephFilesystem.enabled
-  default: true
+  default: false
   description: "Create Ceph File System"
   label: "Create CephFS"
   type: boolean
-  show_subquestion_if: false
+  show_subquestion_if: true
   group: "Ceph File System"
   subquestions:
     - variable: CephFilesystem.name
