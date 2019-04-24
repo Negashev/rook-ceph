@@ -82,7 +82,7 @@ questions:
   type: string
   label: "nodeSelectorTerms key"
   group: "Placement"
-- variable: placement.values
+- variable: placement.value
   default: "ceph"
   description: "Set matchExpressions.value"
   type: string
