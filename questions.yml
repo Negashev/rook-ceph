@@ -76,3 +76,15 @@ questions:
       description: "Create paths in CephFS separated by comma"
       type: string
       label: "CephFS paths"
+- variable: placement.key
+  default: "nodepool"
+  description: "Set matchExpressions.key"
+  type: string
+  label: "nodeSelectorTerms key"
+  group: "Placement"
+- variable: placement.values
+  default: "ceph"
+  description: "Set matchExpressions.value"
+  type: string
+  label: "nodeSelectorTerms value"
+  group: "Placement"

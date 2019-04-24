@@ -14,10 +14,16 @@ spec:
     count: {{ .Values.spec.mon.count }}
   network:
     hostNetwork: {{ .Values.spec.network.hostNetwork }}
-  {{- with .Values.spec.placement }}
   placement:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    all:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: {{ .Values.placement.key }}
+                  operator: In
+                  values:
+                    - {{ .Values.placement.value }}
   {{- with .Values.spec.resources }}
   resources:
     {{- toYaml . | nindent 4 }}

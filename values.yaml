@@ -4,6 +4,9 @@
 
 # clustersystem for rancher multiple app we use regexp
 clustersystem: rook-ceph-system
+placement:
+  key: nodepool
+  value: ceph
 CephFilesystem:
   enabled: true
   name: myfs
@@ -21,16 +24,6 @@ spec:
     count: 3
   network:
     hostNetwork: true
-  placement:
-    all:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: nodepool
-              operator: In
-              values:
-              - ceph
   resources:
     # important manager memory leak problem
     mgr:
