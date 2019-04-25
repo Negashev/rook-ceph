@@ -110,5 +110,27 @@ spec:
             options:
               fsName: {{ .Values.CephFilesystem.name }}
               clusterNamespace: {{ .Release.Namespace }}
+{{- range splitList "," .Values.CephFilesystem.mkdirs }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: "{{- default . | trimPrefix "/" | replace "/" "-" -}}"
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 1000Ti
+  flexVolume:
+    driver: ceph.rook.io/rook
+    fsType: ceph
+    options:
+      clusterNamespace: {{ $.Release.Namespace }}
+      fsName: {{ $.Values.CephFilesystem.name }}
+      path: {{ . }}
+    secretRef: {}
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+{{- end }}
 {{- end -}}
 {{- end -}}
