@@ -31,16 +31,16 @@ spec:
         memory: 512Mi
       requests:
         memory: 512Mi
-    # mon:
-    #   limits:
-    #     cpu: "2"
-    #     memory: 2Gi
-    #   requests:
-    #     cpu: "2"
-    #     memory: 2Gi
-    # osd:
-    #   requests:
-    #     memory: 2Gi
+    mon:
+      limits:
+        memory: 1792Mi
+      requests:
+        memory: 1024Mi
+    osd:
+      limits:
+        memory: 1792Mi
+      requests:
+        memory: 1024Mi
   storage:
     useAllDevices: true
     useAllNodes: true
