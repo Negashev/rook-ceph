@@ -15,7 +15,7 @@ spec:
   cephVersion:
     image:
       repository: ceph/ceph
-      tag: v13.2.2-20181023
+      tag: v14.2.1-20190430
   dashboard:
     enabled: true
   dataDirHostPath: /var/lib/rook
@@ -46,6 +46,7 @@ spec:
     useAllNodes: true
     config:
       storeType: bluestore
+      osdsPerDevice: 1
     devices:
       - name: "sdb"
       - name: "sdc"

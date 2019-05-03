@@ -8,6 +8,7 @@ spec:
     image: {{ .Values.spec.cephVersion.image.repository }}:{{ .Values.spec.cephVersion.image.tag }}
   dashboard:
     enabled: {{ .Values.spec.dashboard.enabled }}
+    ssl: false
   dataDirHostPath: {{ .Values.spec.dataDirHostPath }}
   mon:
     allowMultiplePerNode: {{ .Values.spec.mon.allowMultiplePerNode }}
@@ -16,6 +17,42 @@ spec:
     hostNetwork: {{ .Values.spec.network.hostNetwork }}
   placement:
     all:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: {{ .Values.placement.key }}
+                  operator: In
+                  values:
+                    - {{ .Values.placement.value }}
+    osd:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: {{ .Values.placement.key }}
+                  operator: In
+                  values:
+                    - {{ .Values.placement.value }}
+    mon:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: {{ .Values.placement.key }}
+                  operator: In
+                  values:
+                    - {{ .Values.placement.value }}
+    mgr:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: {{ .Values.placement.key }}
+                  operator: In
+                  values:
+                    - {{ .Values.placement.value }}
+    rbdmirror:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
