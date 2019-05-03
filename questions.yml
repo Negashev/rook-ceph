@@ -13,7 +13,7 @@ questions:
     type: string
     label: "Ceph Engine Image Repository"
   - variable: spec.cephVersion.image.tag
-    default: "v13.2.2-20181023"
+    default: "v14.2.1-20190430"
     description: "Ceph Engine Image Tag"
     type: string
     label: "Ceph Engine Image Tag"
