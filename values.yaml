@@ -18,29 +18,29 @@ spec:
       tag: v14.2.1-20190430
   dashboard:
     enabled: true
+    ssl: false
   dataDirHostPath: /var/lib/rook
   mon:
     allowMultiplePerNode: false
     count: 3
   network:
-    hostNetwork: true
-  resources:
-    # important manager memory leak problem
-    mgr:
-      limits:
-        memory: 512Mi
-      requests:
-        memory: 512Mi
-    mon:
-      limits:
-        memory: 1792Mi
-      requests:
-        memory: 1024Mi
-    osd:
-      limits:
-        memory: 1792Mi
-      requests:
-        memory: 1024Mi
+    hostNetwork: false
+#  resources:
+#    mgr:
+#      limits:
+#        memory: 512Mi
+#      requests:
+#        memory: 512Mi
+#    mon:
+#      limits:
+#        memory: 1792Mi
+#      requests:
+#        memory: 1024Mi
+#    osd:
+#      limits:
+#        memory: 1792Mi
+#      requests:
+#        memory: 1024Mi
   storage:
     useAllDevices: true
     useAllNodes: true
@@ -48,7 +48,7 @@ spec:
       storeType: bluestore
       osdsPerDevice: 1
     devices:
-      - name: "sdb"
-      - name: "sdc"
-      - name: "sdd"
+      - name: sdb
+      - name: sdc
+      - name: sdd
     # location: datacenter=dc1
