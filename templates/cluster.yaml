@@ -25,6 +25,9 @@ spec:
                   operator: In
                   values:
                     - {{ .Values.placement.value }}
+        tolerations:
+        - key: {{ .Values.placement.value }}
+          operator: Exists
     osd:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -34,6 +37,9 @@ spec:
                   operator: In
                   values:
                     - {{ .Values.placement.value }}
+        tolerations:
+        - key: {{ .Values.placement.value }}
+          operator: Exists
     mon:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -43,6 +49,9 @@ spec:
                   operator: In
                   values:
                     - {{ .Values.placement.value }}
+        tolerations:
+        - key: {{ .Values.placement.value }}
+          operator: Exists
     mgr:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -52,6 +61,9 @@ spec:
                   operator: In
                   values:
                     - {{ .Values.placement.value }}
+        tolerations:
+        - key: {{ .Values.placement.value }}
+          operator: Exists
     rbdmirror:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -61,6 +73,9 @@ spec:
                   operator: In
                   values:
                     - {{ .Values.placement.value }}
+        tolerations:
+        - key: {{ .Values.placement.value }}
+          operator: Exists
   {{- with .Values.spec.resources }}
   resources:
     {{- toYaml . | nindent 4 }}
