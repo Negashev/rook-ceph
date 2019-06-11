@@ -47,7 +47,7 @@ spec:
     useAllNodes: true
     config:
       storeType: bluestore
-      osdsPerDevice: 1
+      osdsPerDevice: "1"
     devices:
       - name: sdb
       - name: sdc
