@@ -17,11 +17,11 @@ questions:
     description: "Ceph Engine Image Tag"
     type: string
     label: "Ceph Engine Image Tag"
-- variable: RoleBinding
-  default: true
-  description: "Deploy RoleBinding for system cluster"
+- variable: Common
+  default: false
+  description: "Deploy common.yaml for system cluster"
   type: boolean
-  label: "Deploy RoleBinding"
+  label: "Deploy common.yaml"
   group: "Configuration"
   required: true
 - variable: ceph.clustersystem

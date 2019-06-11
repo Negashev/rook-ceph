@@ -4,6 +4,7 @@
 # and bindings accordingly.
 #################################################################################################################
 # Service account for the Ceph OSDs. Must exist and cannot be renamed.
+{{- if .Values.Common }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -89,7 +90,6 @@ rules:
   - "*"
   verbs:
   - "*"
-{{- if .Values.RoleBinding }}
 ---
   # Allow the operator to create resources in this cluster's namespace
 kind: RoleBinding
@@ -105,7 +105,6 @@ subjects:
 - kind: ServiceAccount
   name: rook-ceph-system
   namespace: {{ include "rook-ceph.system" . }}
-{{- end -}}
 ---
 # Allow the osd pods in this namespace to work with configmaps
 kind: RoleBinding
@@ -136,7 +135,6 @@ subjects:
 - kind: ServiceAccount
   name: rook-ceph-mgr
   namespace: {{ .Release.Namespace }}
-{{- if .Values.RoleBinding }}
 ---
 # Allow the ceph mgr to access the rook system resources necessary for the mgr modules
 kind: RoleBinding
@@ -152,7 +150,6 @@ subjects:
 - kind: ServiceAccount
   name: rook-ceph-mgr
   namespace: {{ .Release.Namespace }}
-{{- end -}}
 ---
 # Allow the ceph mgr to access cluster-wide resources necessary for the mgr modules
 kind: ClusterRoleBinding
@@ -167,3 +164,4 @@ subjects:
 - kind: ServiceAccount
   name: rook-ceph-mgr
   namespace: rook-ceph
+{{- end -}}
