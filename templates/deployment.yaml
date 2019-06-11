@@ -10,134 +10,25 @@ spec:
     enabled: {{ .Values.spec.dashboard.enabled }}
     ssl: false
   dataDirHostPath: {{ .Values.spec.dataDirHostPath }}
-  placement:
-    all:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: {{ .Values.placement.key }}
-              operator: In
-              values:
-              - {{ .Values.placement.value }}
-      tolerations:
-      - key: {{ .Values.placement.value }}
-        operator: Exists
   mon:
     allowMultiplePerNode: {{ .Values.spec.mon.allowMultiplePerNode }}
     count: {{ .Values.spec.mon.count }}
   network:
     hostNetwork: {{ .Values.spec.network.hostNetwork }}
-  {{- with .Values.spec.resources }}
+  placement:
+      all:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ .Values.placement.key }}
+                operator: In
+                values:
+                - {{ .Values.placement.value }}
+        tolerations:
+        - key: {{ .Values.placement.value }}
+          operator: Exists
   resources:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-  {{- with .Values.spec.storage }}
+    {{ toYaml .Values.spec.resources | nindent 4 | trim }}
   storage:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
----
-apiVersion: ceph.rook.io/v1
-kind: CephBlockPool
-metadata:
-  name: replicapool
-  namespace: {{ .Release.Namespace }}
-spec:
-  failureDomain: host
-  replicated:
-    size: 3
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-   name: {{ .Release.Namespace }}-block
-   annotations:
-     storageclass.beta.kubernetes.io/is-default-class: "true"
-     storageclass.kubernetes.io/is-default-class: "true"
-provisioner: ceph.rook.io/block
-parameters:
-  blockPool: replicapool
-  # The value of "clusterNamespace" MUST be the same as the one in which your rook cluster exist
-  clusterNamespace: {{ .Release.Namespace }}
-  # Specify the filesystem type of the volume. If not specified, it will use `ext4`.
-  #fstype: xfs
-# Optional, default reclaimPolicy is "Delete". Other options are: "Retain", "Recycle" as documented in https://kubernetes.io/docs/concepts/storage/storage-classes/
-#reclaimPolicy: Retain
-{{- if .Values.CephFilesystem.enabled }}
----
-apiVersion: ceph.rook.io/v1
-kind: CephFilesystem
-metadata:
-  name: {{ .Values.CephFilesystem.name }}
-  namespace: {{ .Release.Namespace }}
-spec:
-  metadataPool:
-    replicated:
-      size: 3
-  dataPools:
-    - replicated:
-        size: 3
-  metadataServer:
-    activeCount: 1
-    activeStandby: true
-
-{{- if .Values.CephFilesystem.mkdirs }}
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: mkdir-cephfs
-  namespace: {{ .Release.Namespace }}
-spec:
-  backoffLimit: 0
-  ttlSecondsAfterFinished: 100
-  template:
-    spec:
-      containers:
-        - name: mkdir-cephfs
-          image: busybox
-          volumeMounts:
-            - name: mkdir
-              mountPath: /data
-          command:
-            - "mkdir"
-            - "-p"
-            {{- range splitList "," .Values.CephFilesystem.mkdirs }}
-            - "/data{{ . }}"
-            {{- end }}
-      restartPolicy: Never
-      volumes:
-        - name: mkdir
-          flexVolume:
-            driver: ceph.rook.io/rook
-            fsType: ceph
-            options:
-              fsName: {{ .Values.CephFilesystem.name }}
-              clusterNamespace: {{ .Release.Namespace }}
-{{- range splitList "," .Values.CephFilesystem.mkdirs }}
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: "{{- default . | trimPrefix "/" | replace "/" "-" -}}"
-  labels:
-    pv: "{{- default . | trimPrefix "/" | replace "/" "-" -}}"
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 1000Ti
-  flexVolume:
-    driver: ceph.rook.io/rook
-    fsType: ceph
-    options:
-      clusterNamespace: {{ $.Release.Namespace }}
-      fsName: {{ $.Values.CephFilesystem.name }}
-      path: {{ . }}
-    secretRef: {}
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: rook-{{- default . | trimPrefix "/" | replace "/" "-" -}}
-  volumeMode: Filesystem
-{{- end }}
-{{- end -}}
-{{- end -}}
+    {{ toYaml .Values.spec.storage | nindent 4 | trim }}

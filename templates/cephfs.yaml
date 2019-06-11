@@ -1,0 +1,78 @@
+{{- if .Values.CephFilesystem.enabled }}
+---
+apiVersion: ceph.rook.io/v1
+kind: CephFilesystem
+metadata:
+  name: {{ .Values.CephFilesystem.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  metadataPool:
+    replicated:
+      size: 3
+  dataPools:
+    - replicated:
+        size: 3
+  metadataServer:
+    activeCount: 1
+    activeStandby: true
+
+{{- if .Values.CephFilesystem.mkdirs }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mkdir-cephfs
+  namespace: {{ .Release.Namespace }}
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+        - name: mkdir-cephfs
+          image: busybox
+          volumeMounts:
+            - name: mkdir
+              mountPath: /data
+          command:
+            - "mkdir"
+            - "-p"
+            {{- range splitList "," .Values.CephFilesystem.mkdirs }}
+            - "/data{{ . }}"
+            {{- end }}
+      restartPolicy: Never
+      volumes:
+        - name: mkdir
+          flexVolume:
+            driver: ceph.rook.io/rook
+            fsType: ceph
+            options:
+              fsName: {{ .Values.CephFilesystem.name }}
+              clusterNamespace: {{ .Release.Namespace }}
+{{- range splitList "," .Values.CephFilesystem.mkdirs }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: "{{- default . | trimPrefix "/" | replace "/" "-" -}}"
+  labels:
+    pv: "{{- default . | trimPrefix "/" | replace "/" "-" -}}"
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 1000Ti
+  flexVolume:
+    driver: ceph.rook.io/rook
+    fsType: ceph
+    options:
+      clusterNamespace: {{ $.Release.Namespace }}
+      fsName: {{ $.Values.CephFilesystem.name }}
+      path: {{ . }}
+    secretRef: {}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: rook-{{- default . | trimPrefix "/" | replace "/" "-" -}}
+  volumeMode: Filesystem
+{{- end }}
+{{- end -}}
+{{- end -}}
