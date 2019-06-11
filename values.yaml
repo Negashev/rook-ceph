@@ -4,6 +4,7 @@
 
 # clustersystem for rancher multiple app we use regexp
 clustersystem: rook-ceph-system
+RoleBinding: true
 placement:
   key: nodepool
   value: ceph

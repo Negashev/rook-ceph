@@ -17,6 +17,13 @@ questions:
     description: "Ceph Engine Image Tag"
     type: string
     label: "Ceph Engine Image Tag"
+- variable: RoleBinding
+  default: true
+  description: "Deploy RoleBinding for system cluster"
+  type: boolean
+  label: "Deploy RoleBinding"
+  group: "Configuration"
+  required: true
 - variable: ceph.clustersystem
   default: "rook-ceph-system"
   description: "Enter namespace with rook operator"
