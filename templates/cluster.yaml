@@ -20,62 +20,14 @@ spec:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
-            - matchExpressions:
-                - key: {{ .Values.placement.key }}
-                  operator: In
-                  values:
-                    - {{ .Values.placement.value }}
-        tolerations:
-        - key: {{ .Values.placement.value }}
-          operator: Exists
-    osd:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: {{ .Values.placement.key }}
-                  operator: In
-                  values:
-                    - {{ .Values.placement.value }}
-        tolerations:
-        - key: {{ .Values.placement.value }}
-          operator: Exists
-    mon:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: {{ .Values.placement.key }}
-                  operator: In
-                  values:
-                    - {{ .Values.placement.value }}
-        tolerations:
-        - key: {{ .Values.placement.value }}
-          operator: Exists
-    mgr:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: {{ .Values.placement.key }}
-                  operator: In
-                  values:
-                    - {{ .Values.placement.value }}
-        tolerations:
-        - key: {{ .Values.placement.value }}
-          operator: Exists
-    rbdmirror:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: {{ .Values.placement.key }}
-                  operator: In
-                  values:
-                    - {{ .Values.placement.value }}
-        tolerations:
-        - key: {{ .Values.placement.value }}
-          operator: Exists
+          - matchExpressions:
+            - key: role
+              operator: In
+              values:
+              - {{ .Values.placement.key }}
+      tolerations:
+      - key: {{ .Values.placement.value }}
+        operator: Exists
   {{- with .Values.spec.resources }}
   resources:
     {{- toYaml . | nindent 4 }}
