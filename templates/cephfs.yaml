@@ -71,7 +71,7 @@ spec:
       path: {{ . }}
     secretRef: {}
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: rook-{{- default . | trimPrefix "/" | replace "/" "-" -}}
+  storageClassName: rook-{{ default . | trimPrefix "/" | replace "/" "-"  | trim }}
   volumeMode: Filesystem
 {{- end }}
 {{- end -}}
