@@ -10,11 +10,6 @@ spec:
     enabled: {{ .Values.spec.dashboard.enabled }}
     ssl: false
   dataDirHostPath: {{ .Values.spec.dataDirHostPath }}
-  mon:
-    allowMultiplePerNode: {{ .Values.spec.mon.allowMultiplePerNode }}
-    count: {{ .Values.spec.mon.count }}
-  network:
-    hostNetwork: {{ .Values.spec.network.hostNetwork }}
   placement:
     all:
       nodeAffinity:
@@ -28,6 +23,11 @@ spec:
       tolerations:
       - key: {{ .Values.placement.value }}
         operator: Exists
+  mon:
+    allowMultiplePerNode: {{ .Values.spec.mon.allowMultiplePerNode }}
+    count: {{ .Values.spec.mon.count }}
+  network:
+    hostNetwork: {{ .Values.spec.network.hostNetwork }}
   {{- with .Values.spec.resources }}
   resources:
     {{- toYaml . | nindent 4 }}
