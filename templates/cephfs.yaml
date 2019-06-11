@@ -54,9 +54,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: "{{- default . | trimPrefix "/" | replace "/" "-" -}}"
+  name: {{ default . | trimPrefix "/" | replace "/" "-" | trim }}
   labels:
-    pv: "{{- default . | trimPrefix "/" | replace "/" "-" -}}"
+    pv: {{ default . | trimPrefix "/" | replace "/" "-" | trim }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -71,7 +71,7 @@ spec:
       path: {{ . }}
     secretRef: {}
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: rook-{{ default . | trimPrefix "/" | replace "/" "-"  | trim }}
+  storageClassName: rook-{{ default . | trimPrefix "/" | replace "/" "-" | trim }}
   volumeMode: Filesystem
 {{- end }}
 {{- end -}}
