@@ -21,10 +21,10 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
           - matchExpressions:
-            - key: role
+            - key: {{ .Values.placement.key }}
               operator: In
               values:
-              - {{ .Values.placement.key }}
+              - {{ .Values.placement.value }}
       tolerations:
       - key: {{ .Values.placement.value }}
         operator: Exists
